@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>D3Times</title>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+    crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+    crossorigin="anonymous">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/d3Style.css">
+
+</head>
+
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-12 col-md-12">
+        <h1>D3Times</h1>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12  col-md-9">
+        <div id="scatter">
+          <!-- We append our chart here. -->
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12  col-md-9">
+        <div class="article">
+          <h2>Correlations Discovered Between Health Risks and Age, Income</h2>
+          <p>e examined the outcome (for state-level data) of obesity, smoking, and uninsured (healthcare) percentages
+            based on three factors, poverty level (percentage below poverty line), median age, and median household income.
+            We found a positive correlation between poverty levels and levels of unisured individuals. We see similar correlations 
+            with obesity and smoking levels. Conversely, we see negative correlations between all three outcomes and median household income.
+            This tracks with the poverty correlations, as in general, we expect the poverty percentage to decrease as median household income increases.
+          </p>
+
+          <p>With median age, we see some less obvious correlations.  There might be a weak negative correlation
+            between median age and the uninsured percentage of the population.  This might be due to the presence of Medicare for older individuals.
+            However, full conclusions would require quantification of any correlation.  Meanwhile, the smoking percentage shows a positive correlation,
+            as older populations appear to smoke more.  This would seem to correlate well with general knowledge, as accepatance of smoking in public has changed
+            over times.  For example, while people used to smoke in airplanes, many states now ban smoking in any public place, including bars.  Finally,
+            we see no visible correlation between median age and obesity rates.
+          </p>
+
+          <p>It is interesting to note a few other extreme values.  Texas had by the highest uninsured rate.  It,
+            and Georgia, stand out, even accounting for income level.  In a different category, Utah has the lowest percentage of smokers
+            among all states.  There is perhaps, some truth to Utah's sterotype of Mormonism, and Mormon's stereotypical abstinnence from 
+            various substances such as caffeine, alcohol, or tobacco.  Admittedly, though, Utah is also the youngest state by median age,
+            and smoking percentage does tend to decrease with a younger population.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer-->
+  <div id="footer">
+    <p>The Coding Boot Camp&copy;2019</p>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.5.0/d3.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.9.1/d3-tip.js"></script>
+  <script type="text/javascript" src="assets/js/app.js"></script>
+  <script src="https://d3js.org/d3.v4.js"></script> 
+
+</body>
+
+</html>
