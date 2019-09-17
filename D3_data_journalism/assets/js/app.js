@@ -163,7 +163,7 @@
     // add event
     circlesGroup
     // onmouseover event
-      .on("mouseover", function(d) {
+      .on("mouseover", function(d, index) {
         toolTip.show(d);
       })
     // onmouseout event
@@ -269,14 +269,6 @@
     //create group for 3 y-axis labels
     var yLabelsGroup = chartGroup.append("g")
     .attr("transform", `translate(${0 - margin.left/4}, ${(height/2)})`);
-    
-    chartGroup.append("text")
-      .attr("transform", "rotate(-90)")
-      .attr("y", 0 - margin.left)
-      .attr("x", 0 - (height / 2))
-      .attr("dy", "1em")
-      .classed("axis-text", true)
-      .text("Number of Billboard 500 Hits");
 
     var healthcareLabel = yLabelsGroup.append("text")
       .attr("transform", "rotate(-90)")
