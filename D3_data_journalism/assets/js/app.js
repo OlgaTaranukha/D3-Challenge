@@ -1,32 +1,32 @@
-// d3.select(window).on("resize", handleResize);
+d3.select(window).on("resize", handleResize);
 
-// // When the browser loads, loadChart() is called
-// loadChart();
+// When the browser loads, loadChart() is called
+loadChart();
 
-// function handleResize() {
-//   var svgArea = d3.select("svg");
+function handleResize() {
+  var svgArea = d3.select("svg");
 
-//   // If there is already an svg container on the page, remove it and reload the chart
-//   if (!svgArea.empty()) {
-//     svgArea.remove();
-//     loadChart();
-//   }
-// }
+  // If there is already an svg container on the page, remove it and reload the chart
+  if (!svgArea.empty()) {
+    svgArea.remove();
+    loadChart();
+  }
+}
 
-// function loadChart() {
+function loadChart() {
 
 // SVG wrapper dimensions are determined by the current width
 // and height of the browser window.
-//   var svgWidth = window.innerWidth;
-//   var svgHeight = window.innerHeight;
-  var svgWidth = 960;
-  var svgHeight = 660;
+  var svgWidth = window.innerWidth;
+  var svgHeight = window.innerHeight;
+  // var svgWidth = 960;
+  // var svgHeight = 660;
 
   // Define the chart's margins as an object
   var margin = {
       top: 20,
       right: 40,
-      bottom: 200,
+      bottom: 100,
       left: 100
   };
 
@@ -51,30 +51,18 @@
   var chosenYAxis = "healthcare";
 
   // function used for updating x-scale var upon click on axis label
-  function xScale(dataParsed, chosenXAxis) {
+  function xScale(inputData, chosenXAxis) {
     // create scales
     var xLinearScale = d3.scaleLinear()
-      .domain([d3.min(dataParsed, d => d[chosenXAxis]) * 0.8,
-        d3.max(dataParsed, d => d[chosenXAxis]) * 1.2
+      .domain([d3.min(inputData, d => d[chosenXAxis]) * 0.8,
+        d3.max(inputData, d => d[chosenXAxis]) * 1.2
       ])
       .range([0, width]);
 
     return xLinearScale;
 
   }
-
-  // function used for updating y-scale var upon click on axis label
-  function yScale(dataParsed, chosenYAxis) {
-    //create scales
-    var yLinearScale = d3.scaleLinear()
-        .domain([d3.min(dataParsed, d => d[chosenYAxis]) * 0.8,
-            d3.max(dataParsed, d => d[chosenYAxis]) * 1.2
-        ])
-        .range([height, 0]);
-
-    return yLinearScale;
-  }
-
+ 
   // function used for updating xAxis var upon click on axis label
   function renderAxesX(newXScale, xAxis) {
     var bottomAxis = d3.axisBottom(newXScale);
@@ -84,6 +72,18 @@
       .call(bottomAxis);
 
     return xAxis;
+  } 
+
+  // function used for updating y-scale var upon click on axis label
+  function yScale(inputData, chosenYAxis) {
+    //create scales
+    var yLinearScale = d3.scaleLinear()
+        .domain([d3.min(inputData, d => d[chosenYAxis]) * 0.8,
+            d3.max(inputData, d => d[chosenYAxis]) * 1.2
+        ])
+        .range([height, 0]);
+
+    return yLinearScale;
   }
 
   // function used for updating yAxis var upon click on axis label
@@ -125,7 +125,7 @@
     // x label
     //poverty percentage
     if (chosenXAxis === "poverty") {
-      var xlabel = "Poverty:";
+      var xLabel = "Poverty:";
     }
     //age 
     else if (chosenXAxis === "age") {
@@ -153,7 +153,7 @@
     //create tooltip
     var toolTip = d3.tip()
       .attr("class", "tooltip")
-      .offset([80, -60])
+      .offset([-8, 0])
       .html(function(d) {
         return (`${d.state}<br>${xLabel} ${d[chosenXAxis]}<br>${yLabel} ${d[chosenYAxis]}%`);
       });
@@ -177,30 +177,29 @@
   // Retrieve data from the CSV file and execute everything below
   d3.csv("assets/data/data.csv", function(err, inputData) {
     if (err) throw err;
-    // if (err) console.warn(err);
 
     console.log(inputData);
 
     // parse data
-    var dataParsed = inputData.forEach(function(d) {
+    inputData.forEach(function(d) {
       d.obesity = +d.obesity;
       d.income = +d.income;
       d.smokes = +d.smokes;
       d.age = +d.age;
       d.healthcare = +d.healthcare;
       d.poverty = +d.poverty;
+
+      console.log(d.obesity);
+      console.log(d.income);
+      console.log(d.smokes);
+      console.log(d.age);
+      console.log(d.healthcare);
+      console.log(d.poverty);
     });
 
-    console.log(dataParsed.obesity);
-    console.log(dataParsed.income);
-    console.log(dataParsed.smokes);
-    console.log(dataParsed.age);
-    console.log(dataParsed.healthcare);
-    console.log(dataParsed.poverty);
-
     // xLinearScale and yLinearScale functions above csv import
-    var xLinearScale = xScale(dataParsed, chosenXAxis);
-    var yLinearScale = yScale(dataParsed, chosenYAxis);
+    var xLinearScale = xScale(inputData, chosenXAxis);
+    var yLinearScale = yScale(inputData, chosenYAxis);
 
     // Create initial axis functions
     var bottomAxis = d3.axisBottom(xLinearScale);
@@ -219,7 +218,7 @@
 
     // append initial circles
     var circlesGroup = chartGroup.selectAll("circle")
-      .data(Data)
+      .data(inputData)
       .enter()
       .append("circle")
       .classed("stateCircle", true)
@@ -230,8 +229,9 @@
       .attr("opacity", ".5");
 
     //append initial text
-    var textGroup = chartGroup.selectAll(".stateText")
-      .data(dataParsed)
+    var textGroup = chartGroup
+      .selectAll(".stateText")
+      .data(inputData)
       .enter()
       .append("text")
       .classed("stateText", true)
@@ -272,28 +272,31 @@
 
     var healthcareLabel = yLabelsGroup.append("text")
       .attr("transform", "rotate(-90)")
-      .attr("x", 0 - (height / 2))
+      .attr("x", 0)
       .attr("y", 0 - 20)
       .attr("dy", "1em")
       .attr("value", "healthcare")
+      .classed("axis-text", true)
       .classed("active", true)
       .text("Lacks Healthcare (%)");
 
     var smokesLabel = yLabelsGroup.append("text") 
       .attr("transform", "rotate(-90)")
-      .attr("x", 0 - (height / 2))
+      .attr("x", 0)
       .attr("y", 0 - 40)
       .attr("dy", "1em")
       .attr("value", "smokes")
+      .classed("axis-text", true)
       .classed("inactive", true)
       .text("Smokes (%)");
 
     var obesityLabel = yLabelsGroup.append("text")
       .attr("transform", "rotate(-90)")   
-      .attr("x", 0 - (height / 2))
+      .attr("x", 0)
       .attr("y", 0 - 60)
       .attr("dy", "1em")
       .attr("value", "obesity")
+      .classed("axis-text", true)
       .classed("inactive", true)
       .text("Obese (%)");
       
@@ -301,7 +304,7 @@
     var circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup);
 
     // x axis labels event listener
-    labelsGroup.selectAll("text")
+    xlabelsGroup.selectAll("text")
       .on("click", function() {
         // get value of selection
         var value = d3.select(this).attr("value");
@@ -314,7 +317,7 @@
 
           // functions here found above csv import
           // updates x scale for new data
-          xLinearScale = xScale(dataParsed, chosenXAxis);
+          xLinearScale = xScale(inputData, chosenXAxis);
 
           // updates x axis with transition
           xAxis = renderAxesX(xLinearScale, xAxis);
@@ -379,7 +382,7 @@
 
           // functions here found above csv import
           //update y scale for new data
-          yLinearScale = yScale(dataParsed, chosenYAxis);
+          yLinearScale = yScale(inputData, chosenYAxis);
 
           //update y axis with transition
           yAxis = renderAxesY(yLinearScale, yAxis);
@@ -430,4 +433,4 @@
         }
       });
   });
-// }
+}
